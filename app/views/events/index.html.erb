@@ -1,0 +1,40 @@
+<% # encoding : utf-8 %>
+
+<h1>Gö-vents!</h1>
+<%= form_tag events_path do %>
+    <%= text_field_tag :query %>
+    <div><%= submit_tag 'Get Events' %></div>
+
+<% end %>
+
+<% unless @events_json.nil? %>
+    <% @events_json["results"].each do |event| %>
+        <h2><%= link_to event["name"], event["event_url"] %></h2>
+        <div>
+          <%= raw event["description"] %>
+        </div>
+
+
+    <% end %>
+    <% unless @library_events.nil? %>
+        <% i = 1 %>
+        <% while i <= @library_children do %>
+
+            <% @library_events.css("div#item-#{i}").each do |event| %>
+                <p>
+                  <%= link_to event.css('div.card-inner')
+                                  .css('div.card-content')
+                                  .css('a')
+                                  .css('h2.card-title').text.force_encoding('utf-8'),
+                              "https://goteborg.se#{event.css('div.card-inner')
+                                  .css('div.card-content')
+                                  .css('a')[0]['href']}" %>
+                </p>
+                <p>
+                  <%= @library_events.css('div#item-1').css('div.card-inner').css('div.card-content').css('a').css('div.description').css('div.datetime').css('span.date').text.gsub!(/\s+/, ' ') %>
+                </p>
+            <% end %>
+            <% i = i + 1 %>
+        <% end %>
+    <% end %>
+<% end %>

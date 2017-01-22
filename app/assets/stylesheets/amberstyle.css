@@ -1,0 +1,128 @@
+body {
+    background: #e6e6e6;
+    text-align: center;
+    font-family: "Roboto", 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 1em;
+}
+
+.row {
+    max-width: 62.5rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+.upcase {
+    text-transform: uppercase;
+}
+
+.big {
+    font-size: 300%;
+}
+
+.medium-big {
+    font-size: 200%;
+}
+
+.betterhr {
+    box-sizing: content-box;
+    max-height: 5rem;
+    max-width: 62.5rem;
+    height: 0;
+    border-right: 0;
+    border-top: 0;
+    border-bottom: 1px solid #c9c9c9;
+    border-left: 0;
+    margin: 1.25rem auto;
+    clear: both;
+}
+
+.orangehr {
+    max-width: 50px;
+    border-color: #ff9012;
+    border-width: 3px;
+    -webkit-margin-before: 0.5em;
+    -webkit-margin-after: 0.5em;
+    -webkit-margin-start: auto;
+    -webkit-margin-end: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 0;
+    border-top: 3px solid #ff9012;
+}
+
+.logo img {
+    height: 18.75em;
+    margin-top: 6em;
+
+}
+
+img.logo {
+    height: 2em;
+}
+
+h1, h2, h3, h4, h5 {
+    color: rgba(0, 0, 0, 0.5);
+    font-weight: 400;
+
+}
+
+h1 {
+    font-size: 5em;
+    margin: 0;
+}
+
+a {
+    color: #ff9000;
+
+}
+
+.doc {
+    margin: 3em 0;
+    font-size: 1.1em;
+    font-weight: 300
+}
+
+
+/****************************************
+FORMS
+*****************************************/
+select {
+    width: 100%;
+    padding: 16px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #f1f1f1;
+}
+
+textarea {
+    width: 50%;
+    height: 150px;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    resize: none;
+}
+
+input {
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    padding-left: 5px;
+}
+
+.button {
+    background-color: #ff9012;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+}
