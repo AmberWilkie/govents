@@ -5,9 +5,9 @@
     <%= text_field_tag :query %>
     <div><%= submit_tag 'Get Events' %></div>
 <% end %>
-<%= link_to 'Today', events_today_path, remote: true %>
+<%= link_to 'Today', events_today_path %>
 
-<% unless @events_json.nil? %>
+<% unless @events_json.nil? || @events_json['results'].empty? %>
     <h2>Meetup Events</h2>
     <% @events_json["results"].each do |event| %>
         <h2><%= link_to event["name"], event["event_url"] %></h2>
@@ -17,26 +17,15 @@
 
 
     <% end %>
-    <% unless @library_events.nil? %>
-        <h2>Göteborg Stad Events</h2>
-        <% i = 1 %>
-        <% while i <= @library_children do %>
+<% end %>
 
-            <% @library_events.css("div#item-#{i}").each do |event| %>
-                <p>
-                  <%= link_to event.css('div.card-inner')
-                                  .css('div.card-content')
-                                  .css('a')
-                                  .css('h2.card-title').text.force_encoding('utf-8'),
-                              "https://goteborg.se#{event.css('div.card-inner')
-                                  .css('div.card-content')
-                                  .css('a')[0]['href']}" %>
-                </p>
-                <p>
-                  <%= @library_events.css('div#item-1').css('div.card-inner').css('div.card-content').css('a').css('div.description').css('div.datetime').css('span.date').text.gsub!(/\s+/, ' ') %>
-                </p>
-            <% end %>
-            <% i = i + 1 %>
-        <% end %>
+<% unless @city_json.nil? || @city_json['activities'].nil? %>
+    <h2>Göteborg Stad Events</h2>
+    <% @city_json['activities'].each do |item| %>
+        <h2><%= item['name'] %></h2>
+        <div>
+          <%= item['description'] %>
+        </div>
+
     <% end %>
 <% end %>

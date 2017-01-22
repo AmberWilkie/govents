@@ -14,28 +14,21 @@ class Events::EventsController < ApplicationController
     @date_query = 'month'
     @events_json = get_meetup_events
     @city_json = get_city_events
-    # @library_events = get_library_events
-    # @library_children = @library_events.css('div.isotope').children.length
     render 'events/index'
   end
 
   def today
     @query = ''
     @date_query = 'today'
-    # @library_events = get_library_events
-    # @library_children = @library_events.css('div.isotope').children.length
+    @events_json = get_meetup_events
+    @city_json = get_city_events
     render 'events/index'
   end
 
   private
 
   def get_city_events
-    # page = Nokogiri::HTML(open("https://goteborg.se/wps/portal/?uri=gbglnk:kalendarium-ck&searchstring=#{@query}&date=#{@date_query}&type=freetext"),
-    #                       nil,
-    #                       'UTF-8')
-
-    library_response = HTTParty.get('http://esb.goteborg.se/TEIK/001/Kalendarie/?startDate=2017-01-22&date=today&type=freetext&searchstring=')
-    binding.pry
+    HTTParty.get("http://esb.goteborg.se/TEIK/001/Kalendarie/?startDate=#{Date.today}&date=#{@date_query}&type=freetext&searchstring=#{@query}")
   end
 
   def get_meetup_events
@@ -46,10 +39,10 @@ class Events::EventsController < ApplicationController
               country: 'se',
               status: 'upcoming',
               format: 'json',
+              time: "0, #{86400*90}",
               page: '100'}
     meetup_api = MeetupApi.new
     events = meetup_api.open_events(params)
-
   end
 
 end
