@@ -9,6 +9,7 @@
 
 <% unless @events_json.nil? || @events_json['results'].empty? %>
     <h2>Meetup Events</h2>
+    <hr class="betterhr">
     <% @events_json["results"].each do |event| %>
         <h2><%= link_to event["name"], event["event_url"] %></h2>
         <div>
@@ -21,10 +22,11 @@
 
 <% unless @city_json.nil? || @city_json['activities'].nil? %>
     <h2>Göteborg Stad Events</h2>
+    <hr class="betterhr">
     <% @city_json['activities'].each do |item| %>
         <h2><%= item['name'] %></h2>
         <div>
-          <%= item['description'] %>
+          <%= raw item['description'] %>
         </div>
 
     <% end %>

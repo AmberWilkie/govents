@@ -12,6 +12,7 @@ class Events::EventsController < ApplicationController
   def get_events
     @query = params[:query]
     @date_query = 'month'
+    @meetup_date = (86400 * 30 * 3).to_s
     @events_json = get_meetup_events
     @city_json = get_city_events
     render 'events/index'
@@ -20,6 +21,7 @@ class Events::EventsController < ApplicationController
   def today
     @query = ''
     @date_query = 'today'
+    @meetup_date = 86400
     @events_json = get_meetup_events
     @city_json = get_city_events
     render 'events/index'
@@ -39,7 +41,7 @@ class Events::EventsController < ApplicationController
               country: 'se',
               status: 'upcoming',
               format: 'json',
-              time: "0, #{86400*90}",
+              # time: "0, #{@meetup_date}",
               page: '100'}
     meetup_api = MeetupApi.new
     events = meetup_api.open_events(params)
