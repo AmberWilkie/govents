@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   namespace :events do
     get '/', controller: :events, action: :index
     post '/', controller: :events, action: :get_events, as: :get_events
+    get '/today', controller: :events, action: :today, as: :today
   end
 
   # get '/', controller: :events, action: :index
