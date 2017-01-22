@@ -6,5 +6,5 @@ Rails.application.routes.draw do
   end
 
   # get '/', controller: :events, action: :index
-  root to: '/events', controller: :events, action: :index
+  root to: '/events', controller: 'events/events', action: :index
 end
