@@ -23,7 +23,7 @@ class Events::EventsController < ApplicationController
   def today
     @query = ''
     @meetup_date_query = 'today'
-    @date_query = Date.today
+    @date_query = Date.today.strftime('%Y-%m-%d')
     @meetup_date = 1485072000000
     @events_json = get_meetup_events
     @city_json = get_city_events
