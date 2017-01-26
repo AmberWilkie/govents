@@ -11,26 +11,31 @@ class Events::EventsController < ApplicationController
 
   def get_events
     @query = params[:query]
-    @date_query = 'month'
+    @meetup_date_query = 'month'
+    @date_query = Date.today + 30
     @meetup_date = 1485072000000000 # Need to find a real number to use here that makes any sense.
     @events_json = get_meetup_events
     @city_json = get_city_events
+    @facebook_events = get_facebook_events
     render 'events/index'
   end
 
   def today
     @query = ''
-    @date_query = 'today'
+    @meetup_date_query = 'today'
+    @date_query = Date.today
     @meetup_date = 1485072000000
     @events_json = get_meetup_events
     @city_json = get_city_events
+    @facebook_events = get_facebook_events
+    # binding.pry
     render 'events/index'
   end
 
   private
 
   def get_city_events
-    HTTParty.get("http://esb.goteborg.se/TEIK/001/Kalendarie/?startDate=#{Date.today}&date=#{@date_query}&type=freetext&searchstring=#{@query}")
+    HTTParty.get("http://esb.goteborg.se/TEIK/001/Kalendarie/?startDate=#{Date.today}&date=#{@meetup_date_query}&type=freetext&searchstring=#{@query}")
   end
 
   def get_meetup_events
@@ -45,6 +50,16 @@ class Events::EventsController < ApplicationController
               page: '100'}
     meetup_api = MeetupApi.new
     events = meetup_api.open_events(params)
+  end
+
+  def get_facebook_events
+    if @query == ''
+      @query = '*'
+    end
+    options = {
+        'query': {access_token: ENV['FACEBOOK_GRAPH_API_KEY']}
+    }
+    HTTParty.get("https://graph.facebook.com/search?q=#{@query}&type=event&center=57.7089,11.9746&distance=15&access_token=#{ENV['FACEBOOK_GRAPH_API_KEY']}&fields=description&until=#{@date_query}" )
   end
 
 end

@@ -7,6 +7,27 @@
 <% end %>
 <%= link_to 'Today', events_today_path %>
 
+<% unless @facebook_events.nil? || @facebook_events['data'].nil? %>
+    <h2>Facebook Events</h2>
+    <hr class="betterhr">
+    <% @facebook_events['data'].each do |event| %>
+        <h2><%= link_to event['name'], "http://www.facebook.com/#{event['id']}" %></h2>
+        <div>
+          <%= event['location'] %>
+          <div>
+            <%= event['start_time'] %>
+          </div>
+          <div>
+            <%= raw event['description'] %>
+          </div>
+        </div>
+
+
+    <% end %>
+
+
+<% end %>
+
 <% unless @events_json.nil? || @events_json['results'].empty? %>
     <h2>Meetup Events</h2>
     <hr class="betterhr">
