@@ -32,11 +32,12 @@
     <h2>Meetup Events</h2>
     <hr class="betterhr">
     <% @events_json["results"].each do |event| %>
-        <h2><%= link_to event["name"], event["event_url"] %></h2>
-        <div>
-          <%= raw event["description"] %>
-        </div>
-
+        <% if 56 < event['location']['latitude'] < 59 %>
+          <h2><%= link_to event["name"], event["event_url"] %></h2>
+          <div>
+            <%= raw event["description"] %>
+          </div>
+        <% end %>
 
     <% end %>
 <% end %>
