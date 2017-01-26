@@ -11,16 +11,16 @@
     <h2>Facebook Events</h2>
     <hr class="betterhr">
     <% @facebook_events['data'].each do |event| %>
-        <h2><%= link_to event['name'], "http://www.facebook.com/#{event['id']}" %></h2>
-        <div>
-          <%= event['location'] %>
+        <% if event['place'].present? && event['place']['location'].present? && event['place']['location']['city'] == 'Gothenburg' %>
+          <h2><%= link_to event['name'],
+                          "http://www.facebook.com/#{event['id']}" %></h2>
           <div>
-            <%= event['start_time'] %>
+            <%= event['place']['name'] %>, <%= event['place']['location']['street'] %>
+            <div>
+              <%= event['start_time'] %>, <%= event['description'].truncate_words(100) %>
+            </div>
           </div>
-          <div>
-            <%= raw event['description'] %>
-          </div>
-        </div>
+        <% end %>
 
 
     <% end %>
@@ -32,12 +32,10 @@
     <h2>Meetup Events</h2>
     <hr class="betterhr">
     <% @events_json["results"].each do |event| %>
-        <% if 56 < event['location']['latitude'] < 59 %>
           <h2><%= link_to event["name"], event["event_url"] %></h2>
           <div>
-            <%= raw event["description"] %>
+            <%= raw event['description'] %>
           </div>
-        <% end %>
 
     <% end %>
 <% end %>

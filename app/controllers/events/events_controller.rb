@@ -17,6 +17,7 @@ class Events::EventsController < ApplicationController
     @events_json = get_meetup_events
     @city_json = get_city_events
     @facebook_events = get_facebook_events
+    puts @facebook_events
     render 'events/index'
   end
 
@@ -57,7 +58,7 @@ class Events::EventsController < ApplicationController
       @query = '*'
     end
 
-    HTTParty.get("https://graph.facebook.com/search?q=#{@query}&type=event&center=57.7089,11.9746&distance=1000&access_token=#{ENV['FACEBOOK_CODE']}&fields=description,place&until=#{@date_query}" )
+    HTTParty.get("https://graph.facebook.com/search?q=#{@query}&type=event&center=57.7089,11.9746&distance=1000&access_token=#{ENV['FACEBOOK_CODE']}&fields=description,place,name&until=#{@date_query}" )
 
   end
 
