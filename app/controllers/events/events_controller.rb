@@ -17,7 +17,7 @@ class Events::EventsController < ApplicationController
     @events_json = get_meetup_events
     @city_json = get_city_events
     @facebook_events = get_facebook_events
-    puts @facebook_events
+    @grid_number = get_grid_number
     render 'events/index'
   end
 
@@ -29,6 +29,7 @@ class Events::EventsController < ApplicationController
     @events_json = get_meetup_events
     @city_json = get_city_events
     @facebook_events = get_facebook_events
+    @grid_number = get_grid_number
     render 'events/index'
   end
 
@@ -49,7 +50,7 @@ class Events::EventsController < ApplicationController
               time: "0, #{@meetup_date}",
               page: '100'}
     meetup_api = MeetupApi.new
-    events = meetup_api.open_events(params)
+    meetup_api.open_events(params)
   end
 
   def get_facebook_events
@@ -58,8 +59,26 @@ class Events::EventsController < ApplicationController
       @query = '*'
     end
 
-    HTTParty.get("https://graph.facebook.com/search?q=#{@query}&type=event&center=57.7089,11.9746&distance=1000&access_token=#{ENV['FACEBOOK_CODE']}&fields=description,place,name&until=#{@date_query}" )
+    request = HTTParty.get("https://graph.facebook.com/search?q=#{@query}&type=event&center=57.7089,11.9746&distance=1000&access_token=#{ENV['FACEBOOK_CODE']}&fields=description,place,name&until=#{@date_query}")
 
+    events = []
+
+    request['data'].each do |event|
+      if event['place'].present? &&
+          event['place']['location'].present? &&
+          event['place']['location']['city'] == 'Gothenburg'
+          events << event
+      end
+    end
+    events
+  end
+
+  def get_grid_number
+    number = 4
+    number += 2 if @events_json['results'].empty?
+    number += 2 if @facebook_events.empty?
+    number += 2 if @city_json['activities'].empty?
+    number == 8 ? 12 : number
   end
 
 end

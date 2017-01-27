@@ -9,16 +9,13 @@
 
 
 <div class="row">
-  <div class="small-12 large-4 columns">
+  <div class="small-12 large-<%= @grid_number %> columns">
 
-    <% unless @facebook_events.nil? || @facebook_events['data'].nil? %>
+    <% unless @facebook_events.nil? || @facebook_events.empty? %>
         <h2>Facebook Events</h2>
         <hr class="betterhr">
         <ul class="accordion" data-accordion>
-          <% @facebook_events['data'].each do |event| %>
-              <% if event['place'].present? &&
-                  event['place']['location'].present? &&
-                  event['place']['location']['city'] == 'Gothenburg' %>
+          <% @facebook_events.each do |event| %>
                   <li class="accordion-item" data-accordion-item>
                     <a href="#" class="accordion-title"><%= event['name'] %></a>
                     <div class="accordion-content" data-tab-content>
@@ -32,14 +29,13 @@
                       </div>
                     </div>
                   </li>
-              <% end %>
 
           <% end %>
         </ul>
     <% end %>
   </div>
 
-  <div class="small-12 large-4 columns">
+  <div class="small-12 large-<%= @grid_number %> columns">
 
     <% unless @events_json.nil? || @events_json['results'].empty? %>
         <h2>Meetup Events</h2>
@@ -61,7 +57,7 @@
 
   </div>
 
-  <div class="small-12 large-4 columns">
+  <div class="small-12 large-<%= @grid_number %> columns">
     <% unless @city_json.nil? || @city_json['activities'].nil? %>
         <h2>Göteborg Stad Events</h2>
         <hr class="betterhr">
