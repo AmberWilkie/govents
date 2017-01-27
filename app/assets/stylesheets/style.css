@@ -126,3 +126,7 @@ input {
     margin: 4px 2px;
     cursor: pointer;
 }
+
+query {
+    width: 150px;
+}
