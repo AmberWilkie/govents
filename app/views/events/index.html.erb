@@ -1,5 +1,5 @@
 <% # encoding : utf-8 %>
-<div class="row">
+
 <h1>Gö-vents!</h1>
   <%= form_tag events_path do %>
       <%= text_field_tag :query, nil, class: 'query' %>
@@ -8,8 +8,8 @@
   <%= link_to 'Today', events_today_path %>
 
 
-
-  <div class="small-2 large-4 columns">
+<div class="row">
+  <div class="small-12 large-4 columns">
 
     <% unless @facebook_events.nil? || @facebook_events['data'].nil? %>
         <h2>Facebook Events</h2>
@@ -39,7 +39,7 @@
     <% end %>
   </div>
 
-  <div class="small-2 large-4 columns">
+  <div class="small-12 large-4 columns">
 
     <% unless @events_json.nil? || @events_json['results'].empty? %>
         <h2>Meetup Events</h2>
@@ -61,7 +61,7 @@
 
   </div>
 
-  <div class="small-2 large-4 columns">
+  <div class="small-12 large-4 columns">
     <% unless @city_json.nil? || @city_json['activities'].nil? %>
         <h2>Göteborg Stad Events</h2>
         <hr class="betterhr">
