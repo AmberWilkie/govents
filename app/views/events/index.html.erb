@@ -1,68 +1,80 @@
 <% # encoding : utf-8 %>
-
+<div class="row">
 <h1>Gö-vents!</h1>
-<%= form_tag events_path do %>
-    <%= text_field_tag :query, nil, class: 'query' %>
-    <div><%= submit_tag 'Get Events' %></div>
-<% end %>
-<%= link_to 'Today', events_today_path %>
+  <%= form_tag events_path do %>
+      <%= text_field_tag :query, nil, class: 'query' %>
+      <div><%= submit_tag 'Get Events' %></div>
+  <% end %>
+  <%= link_to 'Today', events_today_path %>
 
-<% unless @facebook_events.nil? || @facebook_events['data'].nil? %>
-    <h2>Facebook Events</h2>
-    <hr class="betterhr">
-    <ul class="accordion" data-accordion>
-      <% @facebook_events['data'].each do |event| %>
-          <% if event['place'].present? &&
-              event['place']['location'].present? &&
-              event['place']['location']['city'] == 'Gothenburg' %>
+
+
+  <div class="small-2 large-4 columns">
+
+    <% unless @facebook_events.nil? || @facebook_events['data'].nil? %>
+        <h2>Facebook Events</h2>
+        <hr class="betterhr">
+        <ul class="accordion" data-accordion>
+          <% @facebook_events['data'].each do |event| %>
+              <% if event['place'].present? &&
+                  event['place']['location'].present? &&
+                  event['place']['location']['city'] == 'Gothenburg' %>
+                  <li class="accordion-item" data-accordion-item>
+                    <a href="#" class="accordion-title"><%= event['name'] %></a>
+                    <div class="accordion-content" data-tab-content>
+                      <div>
+                        <%= link_to event['name'],
+                                    "http://www.facebook.com/#{event['id']}" %>
+                      </div>
+                      <%= event['place']['name'] %>, <%= event['place']['location']['street'] %>
+                      <div>
+                        <%= event['start_time'] %>, <%= event['description'].truncate_words(100) %>
+                      </div>
+                    </div>
+                  </li>
+              <% end %>
+
+          <% end %>
+        </ul>
+    <% end %>
+  </div>
+
+  <div class="small-2 large-4 columns">
+
+    <% unless @events_json.nil? || @events_json['results'].empty? %>
+        <h2>Meetup Events</h2>
+        <hr class="betterhr">
+        <ul class="accordion" data-accordion>
+          <% @events_json['results'].each do |event| %>
               <li class="accordion-item" data-accordion-item>
                 <a href="#" class="accordion-title"><%= event['name'] %></a>
                 <div class="accordion-content" data-tab-content>
+                  <h2><%= link_to event["name"], event["event_url"] %></h2>
                   <div>
-                    <%= link_to event['name'],
-                                "http://www.facebook.com/#{event['id']}" %>
-                  </div>
-                  <%= event['place']['name'] %>, <%= event['place']['location']['street'] %>
-                  <div>
-                    <%= event['start_time'] %>, <%= event['description'].truncate_words(100) %>
+                    <%= raw event['description'] %>
                   </div>
                 </div>
               </li>
           <% end %>
-          
-      <% end %>
-    </ul>
-<% end %>
+        </ul>
+    <% end %>
 
-<% unless @events_json.nil? || @events_json['results'].empty? %>
-    <h2>Meetup Events</h2>
-    <hr class="betterhr">
-    <ul class="accordion" data-accordion>
-      <% @events_json['results'].each do |event| %>
-          <li class="accordion-item" data-accordion-item>
-            <a href="#" class="accordion-title"><%= event['name'] %></a>
-            <div class="accordion-content" data-tab-content>
-              <h2><%= link_to event["name"], event["event_url"] %></h2>
-              <div>
-                <%= raw event['description'] %>
-              </div>
-            </div>
-          </li>
-      <% end %>
-    </ul>
-<% end %>
+  </div>
 
-<% unless @city_json.nil? || @city_json['activities'].nil? %>
-    <h2>Göteborg Stad Events</h2>
-    <hr class="betterhr">
-    <ul class="accordion" data-accordion>
-      <% @city_json['activities'].each do |item| %>
-          <li class="accordion-item" data-accordion-item>
-            <a href="#" class="accordion-title"><%= item['name'] %></a>
-            <div class="accordion-content" data-tab-content>
-              <%= raw item['description'] %>
-            </div>
-          </li>
-      <% end %>
-    </ul>
-<% end %>
+  <div class="small-2 large-4 columns">
+    <% unless @city_json.nil? || @city_json['activities'].nil? %>
+        <h2>Göteborg Stad Events</h2>
+        <hr class="betterhr">
+        <ul class="accordion" data-accordion>
+          <% @city_json['activities'].each do |item| %>
+              <li class="accordion-item" data-accordion-item>
+                <a href="#" class="accordion-title"><%= item['name'] %></a>
+                <div class="accordion-content" data-tab-content>
+                  <%= raw item['description'] %>
+                </div>
+              </li>
+          <% end %>
+        </ul>
+    <% end %>
+  </div>
+</div>
