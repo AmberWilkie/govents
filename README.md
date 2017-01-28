@@ -1,3 +1,15 @@
-# README
+# Gothenburg Event Aggregator
+#### In search a brilliant name
+
+## Deployed
+Find this guy up and running on [Heroku](http://apimachine.herokuapp.com/)
 
 With very many thanks to the lovely people at the City of Gothenburg, who make so much of their data [open and free to access](https://catalog.goteborg.se/portal/#view=public&resource=https://catalog.goteborg.se/store/6/resource/10).
+
+## Technologies
+- Facebook Graph API
+- Meetup API
+- The forementioned [Gothenburg City API](http://data.goteborg.se/)
+- ZURB Foundation 6
+- Ruby on Rails
+- HTTParty
