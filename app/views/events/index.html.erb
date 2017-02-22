@@ -5,7 +5,9 @@
       <%= text_field_tag :query, nil, class: 'query' %>
       <div><%= submit_tag 'Get Events' %></div>
   <% end %>
-  <%= link_to 'Today', events_today_path %>
+(Search or just hit the button for everything.)<br>
+(And have some patience - it's called API machine for a reason.)
+  <!--<%= link_to 'Today', events_today_path %>-->
 
 
 <div class="row">
@@ -23,9 +25,10 @@
                         <%= link_to event['name'],
                                     "http://www.facebook.com/#{event['id']}" %>
                       </div>
+                      <strong><%= event['start_time'].to_date %></strong><br>
                       <%= event['place']['name'] %>, <%= event['place']['location']['street'] %>
                       <div>
-                        <%= event['start_time'] %>, <%= event['description'].truncate_words(100) %>
+                        <%= event['description'].truncate_words(100) %>
                       </div>
                     </div>
                   </li>

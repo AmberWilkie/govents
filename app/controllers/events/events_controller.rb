@@ -56,21 +56,24 @@ class Events::EventsController < ApplicationController
   def get_facebook_events
 
     if @query == ''
-      @query = '*'
+      @queries = ['gbg', 'gothenburg', 'goteborg']
+    else
+      @queries = [@query]
     end
-
-    request = HTTParty.get("https://graph.facebook.com/search?q=#{@query}&type=event&center=57.7089,11.9746&distance=1000&access_token=#{ENV['FACEBOOK_CODE']}&fields=description,place,name&until=#{@date_query}")
 
     events = []
 
-    request['data'].each do |event|
-      if event['place'].present? &&
-          event['place']['location'].present? &&
-          event['place']['location']['city'] == 'Gothenburg'
+    @queries.each do |query|
+      request = HTTParty.get("https://graph.facebook.com/search?q=#{query}&type=event&center=57.7089,11.9746&distance=1000&access_token=#{ENV['FACEBOOK_CODE']}&fields=description,place,name,start_time&until=#{@date_query}")
+      request['data'].each do |event|
+        if event['place'].present? &&
+            event['place']['location'].present? &&
+            event['place']['location']['city'] == 'Gothenburg'
           events << event
+        end
       end
     end
-    events
+    events.sort_by{|k, v| k['start_time']}.reverse
   end
 
   def get_grid_number
