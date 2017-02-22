@@ -40,11 +40,14 @@ class Events::EventsController < ApplicationController
     events = []
     all_events = HTTParty.get("http://esb.goteborg.se/TEIK/001/Kalendarie/?startDate=#{Date.today}&date=#{@meetup_date_query}&type=freetext&searchstring=#{@query}")
 
-    all_events['activities'].each do |event|
-      if !event['recurring'] && (event['endDate'].nil? || event['endDate'].to_date < (Date.today + 2.weeks)) && event['startDate'].to_date >= Date.today
-        events << event
+    if all_events['activities']
+      all_events['activities'].each do |event|
+        if !event['recurring'] && (event['endDate'].nil? || event['endDate'].to_date < (Date.today + 2.weeks)) && event['startDate'].to_date >= Date.today
+          events << event
+        end
       end
     end
+
     events.sort_by{|k, v| k['startDate']}.first(50)
   end
 
