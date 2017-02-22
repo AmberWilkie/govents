@@ -18,25 +18,35 @@ class Events::EventsController < ApplicationController
     @city_json = get_city_events
     @facebook_events = get_facebook_events
     @grid_number = get_grid_number
+
     render 'events/index'
   end
 
-  def today
-    @query = ''
-    @meetup_date_query = 'today'
-    @date_query = Date.today.strftime('%Y-%m-%d')
-    @meetup_date = 1485072000000
-    @events_json = get_meetup_events
-    @city_json = get_city_events
-    @facebook_events = get_facebook_events
-    @grid_number = get_grid_number
-    render 'events/index'
-  end
+  # def today
+  #   @query = ''
+  #   @meetup_date_query = 'today'
+  #   @date_query = Date.today.strftime('%Y-%m-%d')
+  #   @meetup_date = 1485072000000
+  #   @events_json = get_meetup_events
+  #   @city_json = get_city_events
+  #   @facebook_events = get_facebook_events
+  #   @grid_number = get_grid_number
+  #   render 'events/index'
+  # end
 
   private
 
   def get_city_events
-    HTTParty.get("http://esb.goteborg.se/TEIK/001/Kalendarie/?startDate=#{Date.today}&date=#{@meetup_date_query}&type=freetext&searchstring=#{@query}")
+    events = []
+    all_events = HTTParty.get("http://esb.goteborg.se/TEIK/001/Kalendarie/?startDate=#{Date.today}&date=#{@meetup_date_query}&type=freetext&searchstring=#{@query}")
+
+    all_events['activities'].each do |event|
+      if event['startDate'] == event['endDate']
+        events << event
+      end
+    end
+
+    events.sort_by{|k, v| k['startDate']}.reverse
   end
 
   def get_meetup_events
@@ -50,7 +60,8 @@ class Events::EventsController < ApplicationController
               time: "0, #{@meetup_date}",
               page: '100'}
     meetup_api = MeetupApi.new
-    meetup_api.open_events(params)
+    events = meetup_api.open_events(params)
+    events['results'].sort_by{|k, v| k['time']}.reverse
   end
 
   def get_facebook_events
@@ -78,9 +89,9 @@ class Events::EventsController < ApplicationController
 
   def get_grid_number
     number = 4
-    number += 2 if @events_json['results'].empty?
+    number += 2 if @events_json.empty?
     number += 2 if @facebook_events.empty?
-    number += 2 if @city_json['activities'].empty?
+    number += 2 if @city_json.empty?
     number == 8 ? 12 : number
   end
 

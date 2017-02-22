@@ -40,15 +40,19 @@
 
   <div class="small-12 large-<%= @grid_number %> columns">
 
-    <% unless @events_json.nil? || @events_json['results'].empty? %>
+    <% unless @events_json.nil? || @events_json.empty? %>
         <h2>Meetup Events</h2>
         <hr class="betterhr">
         <ul class="accordion" data-accordion>
-          <% @events_json['results'].each do |event| %>
+          <% @events_json.each do |event| %>
               <li class="accordion-item" data-accordion-item>
                 <a href="#" class="accordion-title"><%= event['name'] %></a>
                 <div class="accordion-content" data-tab-content>
                   <h2><%= link_to event["name"], event["event_url"] %></h2>
+                  <strong><%= Time.at(event['time']).to_date %></strong><br>
+                  <% if event['venue'] %>
+                    <%= event['venue']['name'] %>, <%= event['venue']['address_1'] %>
+                  <% end %>
                   <div>
                     <%= raw event['description'] %>
                   </div>
@@ -61,15 +65,19 @@
   </div>
 
   <div class="small-12 large-<%= @grid_number %> columns">
-    <% unless @city_json.nil? || @city_json['activities'].nil? %>
+    <% unless @city_json.nil? || @city_json.empty? %>
         <h2>Göteborg Stad Events</h2>
         <hr class="betterhr">
         <ul class="accordion" data-accordion>
-          <% @city_json['activities'].each do |item| %>
+          <% @city_json.each do |item| %>
               <li class="accordion-item" data-accordion-item>
                 <a href="#" class="accordion-title"><%= item['name'] %></a>
                 <div class="accordion-content" data-tab-content>
-                  <%= raw item['description'] %>
+                  <strong><%= item['startDate'].to_date %></strong><br>
+                  <%= item['organizer']['name'] %>, <%= item['organizer']['address'] %>
+                  <div>
+                    <%= raw item['description'] %>
+                  </div>
                 </div>
               </li>
           <% end %>
