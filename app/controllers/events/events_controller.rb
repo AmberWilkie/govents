@@ -41,12 +41,11 @@ class Events::EventsController < ApplicationController
     all_events = HTTParty.get("http://esb.goteborg.se/TEIK/001/Kalendarie/?startDate=#{Date.today}&date=#{@meetup_date_query}&type=freetext&searchstring=#{@query}")
 
     all_events['activities'].each do |event|
-      if event['startDate'] == event['endDate']
+      if !event['recurring'] && (event['endDate'].nil? || event['endDate'].to_date < (Date.today + 2.weeks)) && event['startDate'].to_date >= Date.today
         events << event
       end
     end
-
-    events.sort_by{|k, v| k['startDate']}.reverse
+    events.sort_by{|k, v| k['startDate']}.first(50)
   end
 
   def get_meetup_events
@@ -61,7 +60,7 @@ class Events::EventsController < ApplicationController
               page: '100'}
     meetup_api = MeetupApi.new
     events = meetup_api.open_events(params)
-    events['results'].sort_by{|k, v| k['time']}.reverse
+    events['results'].sort_by{|k, v| k['time']}.reverse.first(50)
   end
 
   def get_facebook_events
