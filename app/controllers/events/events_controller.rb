@@ -63,7 +63,7 @@ class Events::EventsController < ApplicationController
               page: '100'}
     meetup_api = MeetupApi.new
     events = meetup_api.open_events(params)
-    events['results'].sort_by{|k, v| k['time']}.reverse.first(50)
+    events['results'].sort_by{|k, v| k['time']}.first(50)
   end
 
   def get_facebook_events
