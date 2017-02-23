@@ -16,7 +16,7 @@
     <% unless @facebook_events.nil? || @facebook_events.empty? %>
         <h2>Facebook Events</h2>
         <hr class="betterhr">
-        <ul class="accordion" data-accordion>
+        <ul class="accordion" data-accordion data-allow-all-closed="true">
           <% @facebook_events.each do |event| %>
                   <li class="accordion-item" data-accordion-item>
                     <a href="#" class="accordion-title"><%= event['name'] %></a>
@@ -47,7 +47,7 @@
     <% unless @events_json.nil? || @events_json.empty? %>
         <h2>Meetup Events</h2>
         <hr class="betterhr">
-        <ul class="accordion" data-accordion>
+        <ul class="accordion" data-accordion data-allow-all-closed="true">
           <% @events_json.each do |event| %>
               <li class="accordion-item" data-accordion-item>
                 <a href="#" class="accordion-title"><%= event['name'] %></a>
@@ -72,9 +72,9 @@
     <% unless @city_json.nil? || @city_json.empty? %>
         <h2>Ggb Stad Events</h2>
         <hr class="betterhr">
-        <ul class="accordion" data-accordion>
+        <ul class="accordion" data-accordion data-allow-all-closed="true">
           <% @city_json.each do |item| %>
-              <li class="accordion-item" data-accordion-item>
+              <li class="accordion-item" data-accordion-item >
                   <a href="#" class="accordion-title"><%= item['name'] %></a>
                 <div class="accordion-content" data-tab-content>
                   <%= link_to item['name'], "http://goteborg.se/wps/portal/?uri=gbglnk:kalendarium-aktivitet-ck&activityId=#{item['mainActivityId']}&page=detailedActivity&pageTitle=Kalendarium:%20R%C3%B6da%20rummet&date=today" %><br>
