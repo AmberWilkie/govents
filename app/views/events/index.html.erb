@@ -26,7 +26,11 @@
                                     "http://www.facebook.com/#{event['id']}" %>
                       </div>
                       <strong><%= event['start_time'].to_date %></strong><br>
-                      <%= event['place']['name'] %>, <%= event['place']['location']['street'] %>
+                      <% unless event['place'].nil? %>
+                        <%= event['place']['name'] %>, <% unless event['place']['location'].nil? %>
+                              <%= event['place']['location']['street'] %>
+                              <% end %>
+                      <% end %>
                       <div>
                         <%= event['description'].truncate_words(100) %>
                       </div>
