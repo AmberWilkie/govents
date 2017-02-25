@@ -44,7 +44,7 @@ class Events::EventsController < ApplicationController
     @grid_number = get_grid_number
 
     # Show a 'sorry' message if no responses returned
-    if @grid_number == 12 || @grid_number == 10
+    if @grid_number == 10
       @message = "Your search returned no results. Try 'Get All Events' or searching for something else."
     end
 
