@@ -21,3 +21,5 @@ tmp/
 .idea/
 .DS_Store
 .env
+
+public/deploy/

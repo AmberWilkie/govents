@@ -36,6 +36,8 @@ gem 'nokogiri'
 gem 'rest-client'
 gem 'httparty'
 gem 'foundation-rails'
+gem 'actionpack-page_caching'
+gem 'actionpack-action_caching'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

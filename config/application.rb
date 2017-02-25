@@ -33,5 +33,7 @@ module RailsScaffold
     end
 
     config.encoding = "utf-8"
+    config.action_controller.page_cache_directory = "#{Rails.root.to_s}/public/deploy"
+
   end
 end

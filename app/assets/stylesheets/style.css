@@ -6,13 +6,13 @@ body {
 }
 
 /*.row {*/
-    /*max-width: 62.5rem;*/
-    /*margin-left: auto;*/
-    /*margin-right: auto;*/
-    /*padding-top: 1em;*/
-    /*padding-bottom: 1em;*/
-    /*!*background-color: #ffffff;*!*/
-    /*text-align: center;*/
+/*max-width: 62.5rem;*/
+/*margin-left: auto;*/
+/*margin-right: auto;*/
+/*padding-top: 1em;*/
+/*padding-bottom: 1em;*/
+/*!*background-color: #ffffff;*!*/
+/*text-align: center;*/
 /*}*/
 
 .upcase {
@@ -86,7 +86,6 @@ a {
     font-weight: 300
 }
 
-
 /****************************************
 FORMS
 *****************************************/
@@ -115,25 +114,35 @@ input {
     border-radius: 4px;
     background-color: #f8f8f8;
     margin: 5px;
-    /*align-self: center;*/
 }
 
 .button {
     background-color: #ff9012;
     border: none;
     color: white;
-    padding: 16px 32px;
+    padding: 16px 16px;
     text-decoration: none;
-    margin: 4px 2px;
     cursor: pointer;
+    font-size: inherit;
 }
 
 .query {
     margin: auto;
     width: 150px;
+    height: auto;
 }
 
 .center {
     /*align-content: center;*/
     margin: auto;
+}
+
+.intro {
+    width: 50%;
+}
+
+.sorry {
+    margin: 10% 20% 20% 20%;
+    font-size: 1.5em;
+    color: darkgray;
 }

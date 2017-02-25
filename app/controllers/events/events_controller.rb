@@ -3,6 +3,7 @@ require 'open-uri'
 require 'httparty'
 
 class Events::EventsController < ApplicationController
+  # caches_action :get_events
 
   def index
     @events_json = nil
@@ -12,12 +13,40 @@ class Events::EventsController < ApplicationController
   def get_events
     @query = params[:query]
     @meetup_date_query = 'month'
+    @date_query = Date.today + 60
+    @meetup_date = 1485072000000000 # Need to find a real number to use here that makes any sense.
+
+    @events_json = Rails.cache.fetch("meetup", expires_in: 30.minutes) do
+      @events_json = get_meetup_events
+    end
+
+    @city_json = Rails.cache.fetch("gbg_stad", expires_in: 30.minutes) do
+      @city_json = get_city_events
+    end
+
+    @facebook_events = Rails.cache.fetch("facebook", expires_in: 30.minutes) do
+      @facebook_events = get_facebook_events
+    end
+
+    @grid_number = get_grid_number
+
+    render 'events/index'
+  end
+
+  def query_events
+    @query = params[:query]
+    @meetup_date_query = 'month'
     @date_query = Date.today + 30
     @meetup_date = 1485072000000000 # Need to find a real number to use here that makes any sense.
     @events_json = get_meetup_events
     @city_json = get_city_events
     @facebook_events = get_facebook_events
     @grid_number = get_grid_number
+
+    # Show a 'sorry' message if no responses returned
+    if @grid_number == 12 || @grid_number == 10
+      @message = "Your search returned no results. Try 'Get All Events' or searching for something else."
+    end
 
     render 'events/index'
   end
@@ -48,7 +77,7 @@ class Events::EventsController < ApplicationController
       end
     end
 
-    events.sort_by{|k, v| k['startDate']}.first(50)
+    events.sort_by { |k, v| k['startDate'] }.first(50)
   end
 
   def get_meetup_events
@@ -63,15 +92,15 @@ class Events::EventsController < ApplicationController
               page: '100'}
     meetup_api = MeetupApi.new
     events = meetup_api.open_events(params)
-    events['results'].sort_by{|k, v| k['time']}.first(50)
+    events['results'].sort_by { |k, v| k['time'] }.first(50)
   end
 
   def get_facebook_events
 
-    if @query == ''
+    if @query == '' || @query.nil?
       @queries = ['gbg', 'gothenburg', 'goteborg']
     else
-      @queries = [@query]
+      @queries = [@query + ' gbg', @query + ' gothenburg', @query + ' goteborg']
     end
 
     events = []
@@ -79,12 +108,12 @@ class Events::EventsController < ApplicationController
     @queries.each do |query|
       request = HTTParty.get("https://graph.facebook.com/search?q=#{query}&type=event&center=57.7089,11.9746&distance=1000&access_token=#{ENV['FACEBOOK_CODE']}&fields=description,place,name,start_time&until=#{@date_query}")
       request['data'].each do |event|
-        if ( event['start_time'].to_date >= Date.today)
+        if event['start_time'].to_date >= Date.today
           events << event
         end
       end
     end
-    events.sort_by{|k, v| k['start_time']}
+    events.sort_by { |k, v| k['start_time'] }
   end
 
   def get_grid_number

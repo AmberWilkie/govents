@@ -1,16 +1,35 @@
 <% # encoding : utf-8 %>
 
 <h1>Ggb events</h1>
-  <%= form_tag events_path do %>
-      <%= text_field_tag :query, nil, class: 'query' %>
-      <div><%= submit_tag 'Get Events' %></div>
-  <% end %>
-(Search or just hit the button for everything.)<br>
-(And have some patience - it's called API machine for a reason.)
-  <!--<%= link_to 'Today', events_today_path %>-->
+<div class="row">
+  <div class="intro center">
+    <p>Hello! I made this page because I was tired of visiting all the Gothenburg event sites. I pull from Facebook,
+      Meetup and The Göteborg Stad APIs to gather this info. Unfortunately, the search is only as good as the APIs it
+      queries.</p>
+    <p>The codebase is <%= link_to 'here', 'https://github.com/amberwilkie/govents' %>. If you're feeling saucy, come
+      say hi on the <%= link_to 'Twitters', 'https://twitter.com/heyamberwilkie' %>.</p>
+    <!--</div>-->
+    <div class="small-12 medium-6 large-6 column align-self-middle">
+      <%= link_to 'Get all events', events_get_events_path, class: 'button' %>
+    </div>
+    <div class="small-12 medium-6 large-6 column align-self-middle">
+      <%= form_tag events_query_events_path, method: :post do %>
+          <%= text_field_tag :query, nil, class: 'query' %>
+          <div><%= submit_tag 'Search' %></div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
 
 
 <div class="row">
+  <% if @message %>
+      <div class="sorry">
+        <%= @message %>
+      </div>
+  <% end %>
   <div class="small-12 large-<%= @grid_number %> columns">
 
     <% unless @facebook_events.nil? || @facebook_events.empty? %>
@@ -18,24 +37,25 @@
         <hr class="betterhr">
         <ul class="accordion" data-accordion data-allow-all-closed="true">
           <% @facebook_events.each do |event| %>
-                  <li class="accordion-item" data-accordion-item>
-                    <a href="#" class="accordion-title"><%= event['name'] %></a>
-                    <div class="accordion-content" data-tab-content>
-                      <div>
-                        <%= link_to event['name'],
-                                    "http://www.facebook.com/#{event['id']}" %>
-                      </div>
-                      <strong><%= event['start_time'].to_date.strftime("%e %B") %></strong><br>
-                      <% unless event['place'].nil? %>
-                        <%= event['place']['name'] %>, <% unless event['place']['location'].nil? %>
-                              <%= event['place']['location']['street'] %>
-                              <% end %>
+              <li class="accordion-item" data-accordion-item>
+                <a href="#" class="accordion-title"><%= event['name'] %></a>
+                <div class="accordion-content" data-tab-content>
+                  <div>
+                    <%= link_to event['name'],
+                                "http://www.facebook.com/#{event['id']}" %>
+                  </div>
+                  <strong><%= event['start_time'].to_date.strftime("%e %B") %></strong><br>
+                  <% unless event['place'].nil? %>
+                      <%= event['place']['name'] %>,
+                      <% unless event['place']['location'].nil? %>
+                          <%= event['place']['location']['street'] %>
                       <% end %>
-                      <div>
-                        <%= event['description'].truncate_words(100) %>
-                      </div>
-                    </div>
-                  </li>
+                  <% end %>
+                  <div>
+                    <%= event['description'].truncate_words(100) %>
+                  </div>
+                </div>
+              </li>
 
           <% end %>
         </ul>
@@ -55,7 +75,7 @@
                   <h2><%= link_to event["name"], event["event_url"] %></h2>
                   <strong><%= Time.at(event['time']/1000).to_date.strftime("%e %B") %></strong><br>
                   <% if event['venue'] %>
-                    <%= event['venue']['name'] %>, <%= event['venue']['address_1'] %>
+                      <%= event['venue']['name'] %>, <%= event['venue']['address_1'] %>
                   <% end %>
                   <div>
                     <%= raw event['description'] %>
@@ -74,10 +94,11 @@
         <hr class="betterhr">
         <ul class="accordion" data-accordion data-allow-all-closed="true">
           <% @city_json.each do |item| %>
-              <li class="accordion-item" data-accordion-item >
-                  <a href="#" class="accordion-title"><%= item['name'] %></a>
+              <li class="accordion-item" data-accordion-item>
+                <a href="#" class="accordion-title"><%= item['name'] %></a>
                 <div class="accordion-content" data-tab-content>
-                  <%= link_to item['name'], "http://goteborg.se/wps/portal/?uri=gbglnk:kalendarium-aktivitet-ck&activityId=#{item['mainActivityId']}&page=detailedActivity&pageTitle=Kalendarium:%20R%C3%B6da%20rummet&date=today" %><br>
+                  <%= link_to item['name'], "http://goteborg.se/wps/portal/?uri=gbglnk:kalendarium-aktivitet-ck&activityId=#{item['mainActivityId']}&page=detailedActivity&pageTitle=Kalendarium:%20R%C3%B6da%20rummet&date=today" %>
+                  <br>
                   <strong><%= item['startDate'].to_date.strftime("%e %B") %></strong><br>
                   <%= item['organizer']['name'] %>, <%= item['organizer']['address'] %>
                   <div>
