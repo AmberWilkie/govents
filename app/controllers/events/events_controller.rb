@@ -3,7 +3,6 @@ require 'open-uri'
 require 'httparty'
 
 class Events::EventsController < ApplicationController
-  # caches_action :get_events
 
   def index
     @events_json = nil
@@ -14,7 +13,7 @@ class Events::EventsController < ApplicationController
     @query = params[:query]
     @meetup_date_query = 'month'
     @date_query = Date.today + 60
-    @meetup_date = 1485072000000000 # Need to find a real number to use here that makes any sense.
+    @meetup_date = 1485072000000000
 
     @events_json = Rails.cache.fetch("meetup", expires_in: 30.minutes) do
       @events_json = get_meetup_events
@@ -37,7 +36,7 @@ class Events::EventsController < ApplicationController
     @query = params[:query]
     @meetup_date_query = 'month'
     @date_query = Date.today + 30
-    @meetup_date = 1485072000000000 # Need to find a real number to use here that makes any sense.
+    @meetup_date = 1485072000000000
     @events_json = get_meetup_events
     @city_json = get_city_events
     @facebook_events = get_facebook_events
@@ -50,18 +49,6 @@ class Events::EventsController < ApplicationController
 
     render 'events/index'
   end
-
-  # def today
-  #   @query = ''
-  #   @meetup_date_query = 'today'
-  #   @date_query = Date.today.strftime('%Y-%m-%d')
-  #   @meetup_date = 1485072000000
-  #   @events_json = get_meetup_events
-  #   @city_json = get_city_events
-  #   @facebook_events = get_facebook_events
-  #   @grid_number = get_grid_number
-  #   render 'events/index'
-  # end
 
   private
 
