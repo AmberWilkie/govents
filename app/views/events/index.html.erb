@@ -55,9 +55,11 @@
                             <%= event['place']['location']['street'] %>
                         <% end %>
                     <% end %>
-                    <div>
-                      <%= event['description'].truncate_words(100) %>
-                    </div>
+                    <% if event['description'] %>
+                        <div>
+                          <%= event['description'].truncate_words(100) %>
+                        </div>
+                    <% end %>
                   </div>
                 </li>
             <% end %>
