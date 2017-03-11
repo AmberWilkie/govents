@@ -62,11 +62,7 @@ class Events::EventsController < ApplicationController
     @chalmers_events = Rails.cache.fetch("chalmers", expires_in: 30.minutes) do
       @chalmers_events = get_chalmers_events
     end
-    # binding.pry
 
-    # get_pustervik_events
-    # get_gu_events
-    # get_chalmers_events
     render 'events/more'
   end
 

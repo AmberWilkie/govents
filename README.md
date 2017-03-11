@@ -14,6 +14,7 @@ With very many thanks to the lovely people at the City of Gothenburg, who make s
 - Ruby on Rails
 - HTTParty
 - Rails Cache (fragment)
+- Nokogiri
 
 ## To Play
 Assuming you have your Rails environment set up, just `bundle`. Grab API keys from each of the services. Store them in a `.env` file. Then you should be ready to roll.
