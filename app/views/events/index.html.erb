@@ -9,21 +9,23 @@
     <p>The codebase is <%= link_to 'here', 'https://github.com/amberwilkie/govents' %>. If you're feeling saucy, come
       say hi on the <%= link_to 'Twitters', 'https://twitter.com/heyamberwilkie' %>.</p>
     <% if @query %>
-        <div class="small-12 medium-6 large-6 column align-self-middle">
+        <div class="small-12 medium-4 large-4 column align-self-middle">
           <%= form_tag events_get_events_path, method: :post do %>
               <%= submit_tag 'Clear Search', class: 'button' %>
           <% end %>
         </div>
-        <div class="small-12 medium-6 large-6 column align-self-middle">
+        <div class="small-12 medium-4 large-4 column align-self-middle">
     <% else %>
-        <div class="small-12 medium-12 large-12 column align-self-middle">
+        <div class="small-12 medium-6 large-6 column align-self-middle">
     <% end %>
-    <%= form_tag events_query_events_path, method: :post do %>
-        <%= text_field_tag :query, nil, class: 'query' %>
-        <div><%= submit_tag 'Search' %></div>
-    <% end %>
-    <%= link_to 'More', events_more_path, class: 'button' %>
+          <%= form_tag events_query_events_path, method: :post do %>
+              <%= text_field_tag :query, nil, class: 'query' %>
+              <div><%= submit_tag 'Search' %></div>
+          <% end %>
     </div>
+          <div class="small-12 medium-4 large-4 column align-self-middle">
+            <%= link_to 'More', events_more_path, class: 'button' %>
+          </div>
     </div>
   </div>
 
