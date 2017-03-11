@@ -8,9 +8,11 @@
   <div class="small-12 large-4 columns">
     <h2>Pustervik</h2>
     <hr class="betterhr">
-    <% @pustervik_events.each do |event| %>
-        <p><%= raw event %></p>
-    <% end %>
+    <div style="background:white;padding:10px;">
+      <% @pustervik_events.each do |event| %>
+          <p><%= raw event %></p>
+      <% end %>
+    </div>
 
   </div>
 
