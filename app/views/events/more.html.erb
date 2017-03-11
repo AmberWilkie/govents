@@ -2,16 +2,34 @@
 
 <h1>Ggb events</h1>
 <div class="row">
-  <div class="small-12 large-6 columns">
-    <h2>Pustervik Events</h2>
+
+  <div class="small-12 large-4 columns">
+    <h2>Pustervik</h2>
     <hr class="betterhr">
     <% @pustervik_events.each do |event| %>
         <p><%= raw event %></p>
     <% end %>
 
   </div>
-  <div class="small-12 large-6 columns">
-    <h3>University of Gothenburg Events</h3>
+
+  <div class="small-12 large-4 columns">
+    <h2>Chalmers</h2>
+    <hr class="betterhr">
+    <ul class="accordion" data-accordion data-allow-all-closed="true">
+      <% @chalmers_events.each do |hash| %>
+          <li class="accordion-item" data-accordion-item>
+            <%= link_to hash[:title], '#', class: 'accordion-title' %>
+            <div class="accordion-content" data-tab-content>
+              <p><strong><%= link_to hash[:title], hash[:link] %></strong></p>
+              <p><%= raw hash[:description] %></p>
+            </div>
+          </li>
+      <% end %>
+    </ul>
+  </div>
+
+  <div class="small-12 large-4 columns">
+    <h3>University of Gothenburg</h3>
     <hr class="betterhr">
     <ul class="accordion" data-accordion data-allow-all-closed="true">
       <% @gu_events.each do |event| %>

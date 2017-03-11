@@ -53,6 +53,7 @@ class Events::EventsController < ApplicationController
   def more
     get_pustervik_events
     get_gu_events
+    get_chalmers_events
     render 'events/more'
   end
 
@@ -139,6 +140,19 @@ class Events::EventsController < ApplicationController
     page.css('div.record').each do |event|
       @gu_events << event.to_s
     end
+  end
+
+  def get_chalmers_events
+    @chalmers_events = []
+    page = Nokogiri::XML(open('http://www.chalmers.se/en/about-chalmers/calendar/_layouts/ChalmersPublicWeb/EventsRSS.aspx?categories=7db7bdaf-b5f2-4853-a2a1-ea24465cbf16|1584214e-dd8f-4cb4-bf25-fe92608bebfa|8fdbc553-8c2b-466b-aa61-cbe81c2412a4&locations=34f62c47-a64f-4193-b9a2-fca6e16df0a9'), nil, 'UTF-8')
+    page.css('item').each do |event|
+      hash = {}
+      hash[:description] = event.css('description')[0].children[0].text.gsub('f="/', 'f="http://www.chalmers.se/').gsub('c="/', 'c="http://www.chalmers.se/')
+      hash[:link] = event.children[0].children[0].text
+      hash[:title] = event.children[2].children[0].text
+      @chalmers_events << hash
+    end
+    # binding.pry
   end
 
 end
