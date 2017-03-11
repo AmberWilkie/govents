@@ -50,6 +50,11 @@ class Events::EventsController < ApplicationController
     render 'events/index'
   end
 
+  def more
+    get_pustervik_events
+    render 'events/more'
+  end
+
   private
 
   def get_city_events
@@ -109,6 +114,22 @@ class Events::EventsController < ApplicationController
     number += 2 if @facebook_events.empty?
     number += 2 if @city_json.empty?
     number == 8 ? 12 : number
+  end
+
+  def get_pustervik_events
+    @pustervik_events = []
+    page = Nokogiri::HTML(open('http://pustervik.nu/category/arkiv-event/'), nil, 'UTF-8')
+    page.css('div.textwidget')[1].css('p').each do |event|
+      @pustervik_events << event
+    end
+    @pustervik_events.delete_at(0)
+    @pustervik_events = @pustervik_events[0].to_s.split('<br>')
+    @pustervik_events.delete_at(0)
+    @pustervik_events.each do |event|
+      # Add the pustervik URL
+      event.gsub!(/c\=\"/, 'c="http://www.pustervik.nu')
+      event.gsub!(/f\=\"/, 'f="http://www.pustervik.nu')
+    end
   end
 
 end
