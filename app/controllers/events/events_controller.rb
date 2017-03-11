@@ -52,6 +52,7 @@ class Events::EventsController < ApplicationController
 
   def more
     get_pustervik_events
+    get_gu_events
     render 'events/more'
   end
 
@@ -129,6 +130,14 @@ class Events::EventsController < ApplicationController
       # Add the pustervik URL
       event.gsub!(/c\=\"/, 'c="http://www.pustervik.nu')
       event.gsub!(/f\=\"/, 'f="http://www.pustervik.nu')
+    end
+  end
+
+  def get_gu_events
+    @gu_events = []
+    page = Nokogiri::HTML(open('http://www.gu.se/english/about_the_university/news-calendar/Calendar'), nil, 'UTF-8')
+    page.css('div.record').each do |event|
+      @gu_events << event.to_s
     end
   end
 
