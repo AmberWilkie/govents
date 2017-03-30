@@ -130,11 +130,10 @@ class Events::EventsController < ApplicationController
   def get_pustervik_events
     pustervik_events = []
     page = Nokogiri::HTML(open('http://pustervik.nu/category/arkiv-event/'), nil, 'UTF-8')
-    page.css('div.textwidget')[1].css('p').each do |event|
-      pustervik_events << event
+    page.css('div.textwidget')[1].children.each do |event|
+      pustervik_events << event.to_s
     end
     pustervik_events.delete_at(0)
-    pustervik_events = pustervik_events[0].to_s.split('<br>')
     pustervik_events.delete_at(0)
     pustervik_events.each do |event|
       # Add the pustervik URL
