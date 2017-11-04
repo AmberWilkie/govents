@@ -15,17 +15,30 @@ class Events::EventsController < ApplicationController
     @date_query = Date.today + 60
     @meetup_date = 1485072000000000
 
-    @events_json = Rails.cache.fetch("meetup", expires_in: 30.minutes) do
-      @events_json = get_meetup_events
+    begin
+      @events_json = Rails.cache.fetch("meetup", expires_in: 30.minutes) do
+        @events_json = get_meetup_events
+      end
+    rescue
+      @events_json = []
     end
 
-    @city_json = Rails.cache.fetch("gbg_stad", expires_in: 30.minutes) do
-      @city_json = get_city_events
+    begin
+      @city_json = Rails.cache.fetch("gbg_stad", expires_in: 30.minutes) do
+        @city_json = get_city_events
+      end
+    rescue
+      @city_json = []
     end
 
-    @facebook_events = Rails.cache.fetch("facebook", expires_in: 30.minutes) do
-      @facebook_events = get_facebook_events
+    begin
+      @facebook_events = Rails.cache.fetch("facebook", expires_in: 30.minutes) do
+        @facebook_events = get_facebook_events
+      end
+    rescue
+      @facebook_events = []
     end
+    puts 'something'
 
     @grid_number = get_grid_number
 
