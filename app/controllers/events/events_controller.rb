@@ -72,9 +72,9 @@ class Events::EventsController < ApplicationController
       @gu_events = get_gu_events
     end
 
-    @chalmers_events = Rails.cache.fetch("chalmers", expires_in: 30.minutes) do
+    # @chalmers_events = Rails.cache.fetch("chalmers", expires_in: 30.minutes) do
       @chalmers_events = get_chalmers_events
-    end
+    # end
 
     render 'events/more'
   end
@@ -142,23 +142,30 @@ class Events::EventsController < ApplicationController
 
   def get_pustervik_events
     pustervik_events = []
-    page = Nokogiri::HTML(open('http://pustervik.nu/category/arkiv-event/'), nil, 'UTF-8')
-    page.css('div.textwidget')[1].children.each do |event|
+    page = Nokogiri::HTML(open('http://pustervik.nu/kalender/'), nil, 'UTF-8')
+    page.xpath("//ul")[3].css('li.event').each do |event|
       pustervik_events << event.to_s
     end
     pustervik_events.delete_at(0)
     pustervik_events.delete_at(0)
-    pustervik_events.each do |event|
+
+    events = pustervik_events.map do |event|
       # Add the pustervik URL
       event.gsub!(/c\=\"/, 'c="http://www.pustervik.nu')
       event.gsub!(/f\=\"/, 'f="http://www.pustervik.nu')
+
+      # Get the title for the accordion
+      index = pustervik_events.find_index(event)
+      h2 = Nokogiri.HTML(pustervik_events[index]).css('h2')
+      title = "#{h2.children.css('span').text} #{h2.children[2].text}"
+      {title: title, description: event}
     end
-    pustervik_events
+    events
   end
 
   def get_gu_events
     gu_events = []
-    page = Nokogiri::HTML(open('http://www.gu.se/english/about_the_university/news-calendar/Calendar'), nil, 'UTF-8')
+    page = Nokogiri::HTML(open('https://www.gu.se/english/about_the_university/news-calendar/Calendar'), nil, 'UTF-8')
     page.css('div.record').each do |event|
       gu_events << event.to_s
     end
@@ -167,12 +174,12 @@ class Events::EventsController < ApplicationController
 
   def get_chalmers_events
     chalmers_events = []
-    page = Nokogiri::XML(open('http://www.chalmers.se/en/about-chalmers/calendar/_layouts/ChalmersPublicWeb/EventsRSS.aspx?categories=7db7bdaf-b5f2-4853-a2a1-ea24465cbf16|1584214e-dd8f-4cb4-bf25-fe92608bebfa|8fdbc553-8c2b-466b-aa61-cbe81c2412a4&locations=34f62c47-a64f-4193-b9a2-fca6e16df0a9'), nil, 'UTF-8')
-    page.css('item').each do |event|
+    page = Nokogiri::XML(open('https://www.chalmers.se/sv/om-chalmers/kalendarium/Sidor/default.aspx'), nil, 'UTF-8')
+    # binding.pry
+    page.css('div.item').each do |event|
       hash = {}
-      hash[:description] = event.css('description')[0].children[0].text.gsub('f="/', 'f="http://www.chalmers.se/').gsub('c="/', 'c="http://www.chalmers.se/')
-      hash[:link] = event.children[0].children[0].text
-      hash[:title] = event.children[2].children[0].text
+      hash[:description] = event
+      hash[:title] = event&.css('div.desc.visible-xs')&.css('span')&.text
       chalmers_events << hash
     end
     chalmers_events

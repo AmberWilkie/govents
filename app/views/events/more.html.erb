@@ -8,13 +8,18 @@
   <div class="small-12 large-4 columns">
     <h2>Pustervik</h2>
     <hr class="betterhr">
-    <div style="background:white;padding:10px;">
-      <% @pustervik_events.each do |event| %>
-          <p><%= raw event %></p>
+    <ul class="accordion" data-accordion data-allow-all-closed="true">
+      <% @pustervik_events.each do |hash| %>
+        <li class="accordion-item" data-accordion-item>
+          <%= link_to hash[:title], '#', class: 'accordion-title' %>
+          <div class="accordion-content" data-tab-content>
+            <ul class="empty-ul">
+              <%= raw hash[:description] %>
+            </ul>
+          </div>
+        </li>
       <% end %>
     </div>
-
-  </div>
 
   <div class="small-12 large-4 columns">
     <h2>Chalmers</h2>
@@ -22,10 +27,10 @@
     <ul class="accordion" data-accordion data-allow-all-closed="true">
       <% @chalmers_events.each do |hash| %>
           <li class="accordion-item" data-accordion-item>
-            <%= link_to hash[:title], '#', class: 'accordion-title' %>
+            <%= link_to hash[:title]&.gsub!('', ''), '#', class: 'accordion-title' %>
             <div class="accordion-content" data-tab-content>
-              <p><strong><%= link_to hash[:title], hash[:link] %></strong></p>
-              <p><%= raw hash[:description] %></p>
+              <p><%= raw hash[:description]&.children&.css('div.calendar')&.first&.to_s %></p>
+              <p><%= raw hash[:description]&.children&.css('div.desc')&.first&.to_s %></p>
             </div>
           </li>
       <% end %>
@@ -49,4 +54,3 @@
   </div>
 </div>
 </div>
-
