@@ -175,10 +175,12 @@ class Events::EventsController < ApplicationController
   def get_chalmers_events
     chalmers_events = []
     page = Nokogiri::XML(open('https://www.chalmers.se/sv/om-chalmers/kalendarium/Sidor/default.aspx'), nil, 'UTF-8')
-    # binding.pry
     page.css('div.item').each do |event|
       hash = {}
-      hash[:description] = event
+      hash[:description] = {
+        time: event&.children&.css('div.calendar')&.first&.to_s,
+        text: event&.children&.css('div.desc')&.first&.to_s 
+      }
       hash[:title] = event&.css('div.desc.visible-xs')&.css('span')&.text
       chalmers_events << hash
     end

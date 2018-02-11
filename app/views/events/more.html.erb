@@ -29,8 +29,8 @@
           <li class="accordion-item" data-accordion-item>
             <%= link_to hash[:title]&.gsub!('', ''), '#', class: 'accordion-title' %>
             <div class="accordion-content" data-tab-content>
-              <p><%= raw hash[:description]&.children&.css('div.calendar')&.first&.to_s %></p>
-              <p><%= raw hash[:description]&.children&.css('div.desc')&.first&.to_s %></p>
+              <p><%= raw hash[:description][:time] %></p>
+              <p><%= raw hash[:description][:text] %></p>
             </div>
           </li>
       <% end %>
