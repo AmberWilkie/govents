@@ -178,8 +178,8 @@ class Events::EventsController < ApplicationController
     page.css('div.item').each do |event|
       hash = {}
       hash[:description] = {
-        time: event&.children&.css('div.calendar')&.first&.to_s,
-        text: event&.children&.css('div.desc')&.first&.to_s 
+        time: event.children.css('div.calendar').first.to_s,
+        text: event.children.css('div.desc').first.to_s
       }
       hash[:title] = event&.css('div.desc.visible-xs')&.css('span')&.text
       chalmers_events << hash
